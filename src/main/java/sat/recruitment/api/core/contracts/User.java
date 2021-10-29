@@ -1,18 +1,32 @@
-package sat.recruitment.api.controller;
+package sat.recruitment.api.core.contracts;
+
+import javax.validation.constraints.NotNull;
+
+import sat.recruitment.api.core.entities.UserType;
 
 public class User {
-	public String name;
-	public String email;
-	public String address;
-	public String phone;
-	public String userType;
-	public Double money;
+	
+	@NotNull (message = "is required")
+	private String name;
+	
+	@NotNull (message = "is required")
+	private String email;
+	
+	@NotNull (message = "is required")
+	private String address;
+	
+	@NotNull (message = "is required")
+	private String phone;
+	
+	private UserType userType;
+	
+	private Double money;
 	
 	public User() {
 		
 	}
 
-	public User(String name, String email, String address, String phone, String userType, Double money) {
+	public User(String name, String email, String address, String phone, UserType userType, Double money) {
 		super();
 		this.name = name;
 		this.email = email;
@@ -54,11 +68,11 @@ public class User {
 		this.phone = phone;
 	}
 
-	public String getUserType() {
+	public UserType getUserType() {
 		return userType;
 	}
 
-	public void setUserType(String userType) {
+	public void setUserType(UserType userType) {
 		this.userType = userType;
 	}
 

@@ -7,3 +7,8 @@ info:
     name: "java-sat-recruitment"
     description: "This is a simple API to create users"
     version: 1.0
+    
+spring:
+  jackson:
+    mapper:
+      accept-case-insensitive-enums: true

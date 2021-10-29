@@ -7,14 +7,24 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
+
+import sat.recruitment.api.core.contracts.User;
+import sat.recruitment.api.core.entities.UserType;
+import sat.recruitment.api.core.errors.RestControllerError;
 
 @RestController
 @RequestMapping(value = "/api/v1")
@@ -24,7 +34,7 @@ public class SatRecruitmentController {
 
 	@PostMapping(value = "/create-user", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public void createUser(@RequestBody User messageBody) {
+	public void createUser(@Valid @RequestBody User messageBody) {
 		String errors = "";
 
 		validateErrors(messageBody.getName(), messageBody.getEmail(), messageBody.getAddress(), messageBody.getPhone(),
@@ -42,7 +52,7 @@ public class SatRecruitmentController {
 		newUser.setUserType(messageBody.getUserType());
 		newUser.setMoney(messageBody.getMoney());
 
-		if (newUser.getUserType().equals("Normal")) {
+		if (newUser.getUserType() == UserType.NORMAL) {
 			if (Double.valueOf(newUser.getMoney()) > 100) {
 				Double percentage = Double.valueOf("0.12");
 				// If new user is normal and has more than USD100
@@ -57,14 +67,14 @@ public class SatRecruitmentController {
 				}
 			}
 		}
-		if (newUser.getUserType().equals("SuperUser")) {
+		if (newUser.getUserType() == UserType.SUPERUSER) {
 			if (Double.valueOf(newUser.getMoney()) > 100) {
 				Double percentage = Double.valueOf("0.20");
 				Double gif = Double.valueOf(newUser.getMoney()) * percentage;
 				newUser.setMoney(newUser.getMoney() + gif);
 			}
 		}
-		if (newUser.getUserType().equals("Premium")) {
+		if (newUser.getUserType() == UserType.PREMIUM) {
 			if (Double.valueOf(newUser.getMoney()) > 100) {
 				Double gif = Double.valueOf(newUser.getMoney()) * 2;
 				newUser.setMoney(newUser.getMoney() + gif);
@@ -86,7 +96,7 @@ public class SatRecruitmentController {
 				user.setEmail(line[1]);
 				user.setPhone(line[2]);
 				user.setAddress(line[3]);
-				user.setUserType(line[4]);
+				//user.setUserType(line[4]);
 				user.setMoney(Double.valueOf(line[5]));
 				users.add(user);
 
@@ -128,5 +138,15 @@ public class SatRecruitmentController {
 			// Validate if Phone is null
 			errors = errors + " The phone is required";
 	}
+	
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ArrayList<RestControllerError> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        ArrayList<RestControllerError> errors = new ArrayList<>();
+        for(ObjectError error:ex.getBindingResult().getAllErrors()) {
+        	errors.add(new RestControllerError(((FieldError) error).getField() +" "+ error.getDefaultMessage()));
+        }
+        return errors;
+    }
 
 }
