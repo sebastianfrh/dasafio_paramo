@@ -18,9 +18,10 @@ public class User {
 	@NotNull (message = "is required")
 	private String phone;
 	
+	@NotNull (message = "is required")
 	private UserType userType;
 	
-	private Double money;
+	private Double money = Double.valueOf(0);
 	
 	public User() {
 		
@@ -34,6 +35,15 @@ public class User {
 		this.phone = phone;
 		this.userType = userType;
 		this.money = money;
+	}
+	
+	public User(User userRequest) {
+		this.name = userRequest.name;
+		this.email = userRequest.email;
+		this.address = userRequest.address;
+		this.phone = userRequest.phone;
+		this.userType = userRequest.userType;
+		this.money = userRequest.money;
 	}
 
 	public String getName() {
