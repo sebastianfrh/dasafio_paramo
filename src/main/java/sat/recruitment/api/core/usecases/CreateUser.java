@@ -21,7 +21,6 @@ public class CreateUser implements ICreateUser{
 	
 	@Autowired
 	private IUserProvider userProvider;
-	private List<User> users = new ArrayList<User>();
 	
 	@Override
 	public UserEntity execute(User userRequest) throws RepositoryException, IOException, ExistingEntityException{
@@ -30,49 +29,6 @@ public class CreateUser implements ICreateUser{
 		newUser.setMoney(newUser.getMoney() + gif);
 		
 		return userProvider.save(newUser);
-
-		/*InputStream fstream;
-		try {
-			fstream = getClass().getResourceAsStream("/users.txt");
-
-			BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
-
-			String strLine;
-
-			while ((strLine = br.readLine()) != null) {
-				String[] line = strLine.split(",");
-				User user = new User();
-				user.setName(line[0]);
-				user.setEmail(line[1]);
-				user.setPhone(line[2]);
-				user.setAddress(line[3]);
-				//user.setUserType(line[4]);
-				user.setMoney(Double.valueOf(line[5]));
-				users.add(user);
-
-			}
-			fstream.close();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		Boolean isDuplicated = false;
-		for (User user : users) {
-
-			if (user.getEmail().equals(newUser.getEmail()) || user.getPhone().equals(newUser.getPhone())) {
-				isDuplicated = true;
-			} else if (user.getName().equals(newUser.getName())) {
-				if (user.getAddress().equals(newUser.getAddress())) {
-					isDuplicated = true;
-				}
-
-			}
-		}
-		if (isDuplicated) {
-			//throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User is duplicated");
-			return false;
-		}*/
 	}
 	
 	private Double calculateGifPercentage(UserEntity user) {
