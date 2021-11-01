@@ -1,5 +1,6 @@
 package sat.recruitment.api.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.validation.Valid;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import sat.recruitment.api.core.contracts.User;
+import sat.recruitment.api.core.errors.ExistingEntityException;
+import sat.recruitment.api.core.errors.RepositoryException;
 import sat.recruitment.api.core.errors.RestControllerError;
 import sat.recruitment.api.core.usecases.ICreateUser;
 
@@ -32,12 +35,15 @@ public class SatRecruitmentController {
 	@PostMapping(value = "/create-user", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public void createUser(@Valid @RequestBody User messageBody) {
-		boolean result = this.createUserUseCase.execute(messageBody);
-
-		if (!result) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "");
+		try {
+			var result = this.createUserUseCase.execute(messageBody);
+		} catch (RepositoryException e) {
+			throw new ResponseStatusException(HttpStatus.FAILED_DEPENDENCY, e.getMessage());
+		} catch (ExistingEntityException e) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+		} catch (IOException e) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
-
 		
 	}
 
