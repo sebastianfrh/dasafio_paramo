@@ -1,11 +1,6 @@
 package sat.recruitment.api.core.usecases;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,15 +9,14 @@ import sat.recruitment.api.core.contracts.User;
 import sat.recruitment.api.core.entities.UserEntity;
 import sat.recruitment.api.core.errors.ExistingEntityException;
 import sat.recruitment.api.core.errors.RepositoryException;
-import sat.recruitment.api.core.providers.IUserProvider;
+import sat.recruitment.api.core.providers.UserProvider;
 
 @Service
-public class CreateUser implements ICreateUser{
+public class CreateUserService {
 	
 	@Autowired
-	private IUserProvider userProvider;
+	private UserProvider userProvider;
 	
-	@Override
 	public UserEntity execute(User userRequest) throws RepositoryException, IOException, ExistingEntityException{
 		var newUser = new UserEntity(userRequest);
 		var gif = Double.valueOf(newUser.getMoney()) * calculateGifPercentage(newUser);

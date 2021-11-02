@@ -5,15 +5,14 @@ import org.apache.commons.csv.CSVRecord;
 import sat.recruitment.api.core.contracts.User;
 
 public class UserEntity {
-	
+
 	private String name;
 	private String email;
 	private String address;
 	private String phone;
 	private UserType userType;
 	private Double money;
-	
-	
+
 	public UserEntity(User userRequest) {
 		this.name = userRequest.getName();
 		this.email = userRequest.getEmail();
@@ -22,7 +21,7 @@ public class UserEntity {
 		this.userType = userRequest.getUserType();
 		this.money = userRequest.getMoney();
 	}
-	
+
 	public UserEntity(CSVRecord userRecord) {
 		this.name = userRecord.get(0);
 		this.email = userRecord.get(1);
@@ -31,7 +30,7 @@ public class UserEntity {
 		this.userType = UserType.valueOf(userRecord.get(4).trim().toUpperCase());
 		this.money = Double.valueOf(userRecord.get(5));
 	}
-	
+
 	public boolean equals(Object o) {
 		if (o == null || !(o instanceof UserEntity)) {
 			return false;
@@ -40,13 +39,23 @@ public class UserEntity {
 		UserEntity user = (UserEntity) o;
 
 		if (user.getEmail().equals(this.getEmail()) || user.getPhone().equals(this.getPhone())) {
-			return  true;
+			return true;
 		} else if (user.getName().equals(this.getName()) && user.getAddress().equals(this.getAddress())) {
 			return true;
 
 		}
 
 		return false;
+	}
+
+	public String toString() {
+		return this.name + "," + this.email + "," + this.phone + "," + this.address + "," + this.userType + ","
+				+ this.money;
+	}
+
+	public String[] toArrayOfStrings() {
+		return new String[] { this.name, this.email, this.phone, this.address, this.userType.toString(),
+				Double.toString(this.money) };
 	}
 
 	public String getName() {

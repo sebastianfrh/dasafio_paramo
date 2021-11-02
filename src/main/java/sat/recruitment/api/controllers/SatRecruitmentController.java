@@ -1,4 +1,4 @@
-package sat.recruitment.api.controller;
+package sat.recruitment.api.controllers;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,20 +23,20 @@ import sat.recruitment.api.core.contracts.User;
 import sat.recruitment.api.core.errors.ExistingEntityException;
 import sat.recruitment.api.core.errors.RepositoryException;
 import sat.recruitment.api.core.errors.RestControllerError;
-import sat.recruitment.api.core.usecases.ICreateUser;
+import sat.recruitment.api.core.usecases.CreateUserService;
 
 @RestController
 @RequestMapping(value = "/api/v1")
 public class SatRecruitmentController {
 
 	@Autowired
-	private ICreateUser createUserUseCase;
+	private CreateUserService createUserService;
 
 	@PostMapping(value = "/create-user", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public void createUser(@Valid @RequestBody User messageBody) {
 		try {
-			var result = this.createUserUseCase.execute(messageBody);
+			var result = this.createUserService.execute(messageBody);
 		} catch (RepositoryException e) {
 			throw new ResponseStatusException(HttpStatus.FAILED_DEPENDENCY, e.getMessage());
 		} catch (ExistingEntityException e) {
