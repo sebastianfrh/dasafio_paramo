@@ -49,7 +49,7 @@ public class UserRepository implements UserProvider {
 			writer.close();
 			printer.close();
 		} else {
-			throw new ExistingEntityException(user.getName() + " already exists");
+			throw new ExistingEntityException("user "+ user.getName() + " already exists");
 		}
 		return null;
 	}
@@ -62,7 +62,7 @@ public class UserRepository implements UserProvider {
 		Iterable<CSVRecord> records;
 
 		try {
-			file = new File(resource.getURI());
+			file = resource.getFile();
 			if(!file.exists()) {
 				file.createNewFile();
 			}

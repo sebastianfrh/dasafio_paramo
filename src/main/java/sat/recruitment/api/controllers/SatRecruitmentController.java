@@ -34,14 +34,12 @@ public class SatRecruitmentController {
 
 	@PostMapping(value = "/create-user", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(value = HttpStatus.CREATED)
-	public void createUser(@Valid @RequestBody User messageBody) {
+	public void createUser(@Valid @RequestBody User messageBody) throws ExistingEntityException {
 		try {
 			var result = this.createUserService.execute(messageBody);
 		} catch (RepositoryException e) {
 			throw new ResponseStatusException(HttpStatus.FAILED_DEPENDENCY, e.getMessage());
-		} catch (ExistingEntityException e) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-		} catch (IOException e) {
+		}  catch (IOException e) {
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
 		}
 		
@@ -57,5 +55,22 @@ public class SatRecruitmentController {
         }
         return errors;
     }
-
+	
+	@ExceptionHandler(ExistingEntityException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+    public RestControllerError handleExistingEntityException(ExistingEntityException ex) {
+        return new RestControllerError(ex.getMessage());
+    }
+	
+	@ExceptionHandler(RepositoryException.class)
+	@ResponseStatus(HttpStatus.FAILED_DEPENDENCY)
+    public RestControllerError handleRepositoryException(RepositoryException ex) {
+        return new RestControllerError(ex.getMessage());
+    }
+	
+	@ExceptionHandler(IOException.class)
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public RestControllerError handleIOException(IOException ex) {
+        return new RestControllerError(ex.getMessage());
+    }
 }

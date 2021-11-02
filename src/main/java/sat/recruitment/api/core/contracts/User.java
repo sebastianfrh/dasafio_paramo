@@ -1,5 +1,6 @@
 package sat.recruitment.api.core.contracts;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
 import sat.recruitment.api.core.entities.UserType;
@@ -10,6 +11,7 @@ public class User {
 	private String name;
 	
 	@NotNull (message = "is required")
+	@Email (message = "invalid format")
 	private String email;
 	
 	@NotNull (message = "is required")
