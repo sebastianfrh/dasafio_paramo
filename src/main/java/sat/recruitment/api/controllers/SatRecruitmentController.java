@@ -23,7 +23,7 @@ import sat.recruitment.api.core.contracts.User;
 import sat.recruitment.api.core.errors.ExistingEntityException;
 import sat.recruitment.api.core.errors.RepositoryException;
 import sat.recruitment.api.core.errors.RestControllerError;
-import sat.recruitment.api.core.usecases.CreateUserService;
+import sat.recruitment.api.core.services.CreateUserService;
 
 @RestController
 @RequestMapping(value = "/api/v1")

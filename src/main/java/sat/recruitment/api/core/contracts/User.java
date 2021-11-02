@@ -6,28 +6,24 @@ import javax.validation.constraints.NotNull;
 import sat.recruitment.api.core.entities.UserType;
 
 public class User {
-	
-	@NotNull (message = "is required")
+
+	@NotNull(message = "is required")
 	private String name;
-	
-	@NotNull (message = "is required")
-	@Email (message = "invalid format")
+
+	@NotNull(message = "is required")
+	@Email(message = "invalid format")
 	private String email;
-	
-	@NotNull (message = "is required")
+
+	@NotNull(message = "is required")
 	private String address;
-	
-	@NotNull (message = "is required")
+
+	@NotNull(message = "is required")
 	private String phone;
-	
-	@NotNull (message = "is required")
+
+	@NotNull(message = "is required")
 	private UserType userType;
-	
-	private Double money = Double.valueOf(0);
-	
-	public User() {
-		
-	}
+
+	private Double money;
 
 	public User(String name, String email, String address, String phone, UserType userType, Double money) {
 		super();
@@ -36,16 +32,7 @@ public class User {
 		this.address = address;
 		this.phone = phone;
 		this.userType = userType;
-		this.money = money;
-	}
-	
-	public User(User userRequest) {
-		this.name = userRequest.name;
-		this.email = userRequest.email;
-		this.address = userRequest.address;
-		this.phone = userRequest.phone;
-		this.userType = userRequest.userType;
-		this.money = userRequest.money;
+		this.money = (money != null) ? money : Double.valueOf(0);
 	}
 
 	public String getName() {

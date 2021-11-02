@@ -13,6 +13,16 @@ public class UserEntity {
 	private UserType userType;
 	private Double money;
 
+	public UserEntity(String name, String email, String address, String phone, UserType userType, Double money) {
+		super();
+		this.name = name;
+		this.email = email;
+		this.address = address;
+		this.phone = phone;
+		this.userType = userType;
+		this.money = money;
+	}
+
 	public UserEntity(User userRequest) {
 		this.name = userRequest.getName();
 		this.email = userRequest.getEmail();

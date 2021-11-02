@@ -38,20 +38,17 @@ public class UserRepository implements UserProvider {
 	ResourceLoader resourceLoader;
 
 	@Override
-	public UserEntity save(UserEntity user) throws RepositoryException, IOException, ExistingEntityException {
-		if (!exists(user)) {
-			Resource resource = resourceLoader.getResource("classpath:" + fileName);
-			//File file = resource.getFile();
-			BufferedWriter writer = Files.newBufferedWriter(Paths.get(resource.getURI()), StandardCharsets.UTF_8, 
-					StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.APPEND);
-			CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT);
-			printer.printRecord(user.toArrayOfStrings());
-			writer.close();
-			printer.close();
-		} else {
-			throw new ExistingEntityException("user "+ user.getName() + " already exists");
-		}
-		return null;
+	public UserEntity save(UserEntity user) throws IOException {
+		Resource resource = resourceLoader.getResource("classpath:" + fileName);
+		// File file = resource.getFile();
+		BufferedWriter writer = Files.newBufferedWriter(Paths.get(resource.getURI()), StandardCharsets.UTF_8,
+				StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.APPEND);
+		CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT);
+		printer.printRecord(user.toArrayOfStrings());
+		writer.close();
+		printer.close();
+
+		return user;
 	}
 
 	@Override
@@ -63,7 +60,7 @@ public class UserRepository implements UserProvider {
 
 		try {
 			file = resource.getFile();
-			if(!file.exists()) {
+			if (!file.exists()) {
 				file.createNewFile();
 			}
 			reader = new FileReader(file);
