@@ -39,7 +39,7 @@ public class SatRecruitmentController {
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public void createUser(@Valid @RequestBody UserRequest messageBody) throws Exception {
 		try {
-		this.createUserService.execute(messageBody);
+			this.createUserService.execute(messageBody);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			throw e;
