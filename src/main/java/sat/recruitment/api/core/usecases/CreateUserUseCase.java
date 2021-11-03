@@ -2,7 +2,6 @@ package sat.recruitment.api.core.usecases;
 
 import java.io.IOException;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import sat.recruitment.api.core.contracts.UserRequest;
@@ -20,7 +19,8 @@ public class CreateUserUseCase {
 		this.userProvider = userProvider;
 	}
 
-	public UserEntity execute(UserRequest userRequest) throws RepositoryException, IOException, ExistingEntityException {
+	public UserEntity execute(UserRequest userRequest)
+			throws RepositoryException, IOException, ExistingEntityException {
 		var newUser = new UserEntity(userRequest);
 		var gif = Double.valueOf(newUser.getMoney()) * calculateGifPercentage(newUser);
 		newUser.setMoney(newUser.getMoney() + gif);
@@ -28,7 +28,7 @@ public class CreateUserUseCase {
 		if (!userProvider.exists(newUser)) {
 			return userProvider.save(newUser);
 		} else {
-			throw new ExistingEntityException("user "+ newUser.getName() + " already exists");
+			throw new ExistingEntityException("user " + newUser.getName() + " already exists");
 		}
 	}
 

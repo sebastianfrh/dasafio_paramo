@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 import javax.validation.Valid;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.validation.FieldError;
@@ -16,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
-
 import sat.recruitment.api.core.contracts.UserRequest;
 import sat.recruitment.api.core.errors.ExistingEntityException;
 import sat.recruitment.api.core.errors.RepositoryException;
@@ -29,6 +29,7 @@ import sat.recruitment.api.core.usecases.CreateUserUseCase;
 public class SatRecruitmentController {
 
 	private final CreateUserUseCase createUserService;
+	private static final Logger logger = LogManager.getLogger(SatRecruitmentController.class);
 
 	public SatRecruitmentController(CreateUserUseCase createUserService) {
 		this.createUserService = createUserService;
@@ -37,7 +38,12 @@ public class SatRecruitmentController {
 	@PostMapping(value = "/create-user", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public void createUser(@Valid @RequestBody UserRequest messageBody) throws Exception {
-		var result = this.createUserService.execute(messageBody);
+		try {
+		this.createUserService.execute(messageBody);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			throw e;
+		}
 	}
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
