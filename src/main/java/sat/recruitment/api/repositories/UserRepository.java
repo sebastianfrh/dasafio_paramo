@@ -17,13 +17,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 import sat.recruitment.api.core.entities.UserEntity;
 import sat.recruitment.api.core.errors.RepositoryException;
 import sat.recruitment.api.core.providers.UserProvider;
 
-@Service
+@Repository
 public class UserRepository implements UserProvider {
 
 	@Value("${spring.datasource.file.name}")

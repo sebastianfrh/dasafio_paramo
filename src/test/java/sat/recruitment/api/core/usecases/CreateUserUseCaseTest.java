@@ -1,4 +1,4 @@
-package sat.recruitment.api.core.services;
+package sat.recruitment.api.core.usecases;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -23,7 +23,6 @@ import sat.recruitment.api.core.entities.UserEntity;
 import sat.recruitment.api.core.entities.UserType;
 import sat.recruitment.api.core.errors.ExistingEntityException;
 import sat.recruitment.api.core.providers.UserProvider;
-import sat.recruitment.api.core.usecases.CreateUserUseCase;
 
 @ExtendWith(MockitoExtension.class)
 public class CreateUserUseCaseTest {
