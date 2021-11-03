@@ -5,7 +5,7 @@ import javax.validation.constraints.NotNull;
 
 import sat.recruitment.api.core.entities.UserType;
 
-public class User {
+public class UserRequest {
 
 	@NotNull(message = "is required")
 	private String name;
@@ -25,7 +25,7 @@ public class User {
 
 	private Double money;
 
-	public User(String name, String email, String address, String phone, UserType userType, Double money) {
+	public UserRequest(String name, String email, String address, String phone, UserType userType, Double money) {
 		super();
 		this.name = name;
 		this.email = email;

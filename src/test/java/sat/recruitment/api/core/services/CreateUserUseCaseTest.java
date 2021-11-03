@@ -1,13 +1,12 @@
 package sat.recruitment.api.core.services;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
@@ -19,14 +18,15 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import sat.recruitment.api.core.contracts.User;
+import sat.recruitment.api.core.contracts.UserRequest;
 import sat.recruitment.api.core.entities.UserEntity;
 import sat.recruitment.api.core.entities.UserType;
 import sat.recruitment.api.core.errors.ExistingEntityException;
 import sat.recruitment.api.core.providers.UserProvider;
+import sat.recruitment.api.core.usecases.CreateUserUseCase;
 
 @ExtendWith(MockitoExtension.class)
-public class CreateUserServiceTest {
+public class CreateUserUseCaseTest {
 
 	@Mock
 	UserProvider userProviderMock;
@@ -38,7 +38,7 @@ public class CreateUserServiceTest {
 
 		when(userProviderMock.exists(mockUserEntity)).thenReturn(true);
 
-		CreateUserService service = new CreateUserService(userProviderMock);
+		CreateUserUseCase service = new CreateUserUseCase(userProviderMock);
 		try {
 			service.execute(aNormalUserRequest());
 		} catch (ExistingEntityException e) {
@@ -56,7 +56,7 @@ public class CreateUserServiceTest {
 		when(userProviderMock.exists(mockUserEntity)).thenReturn(false);
 		when(userProviderMock.save(mockUserEntity)).thenReturn(mockUserEntity);
 
-		CreateUserService service = new CreateUserService(userProviderMock);
+		CreateUserUseCase service = new CreateUserUseCase(userProviderMock);
 		var result = service.execute(aNormalUserRequest());
 
 		assertNotNull(result);
@@ -68,14 +68,14 @@ public class CreateUserServiceTest {
 
 	@ParameterizedTest(name = "Run {index}: userEntity={0}, userRequest={1}")
 	@MethodSource("testCreateUsersParameters")
-	public void testCreateNormalUserMoneyShouldCalculateCorrectGifSaveAndReturn(UserEntity userEntity, User userRequest)
+	public void testCreateNormalUserMoneyShouldCalculateCorrectGifSaveAndReturn(UserEntity userEntity, UserRequest userRequest)
 			throws Throwable {
 		assertNotNull(userProviderMock);
 
 		when(userProviderMock.exists(userEntity)).thenReturn(false);
 		when(userProviderMock.save(userEntity)).thenReturn(userEntity);
 
-		CreateUserService service = new CreateUserService(userProviderMock);
+		CreateUserUseCase service = new CreateUserUseCase(userProviderMock);
 		var result = service.execute(userRequest);
 
 		assertNotNull(result);
@@ -90,8 +90,8 @@ public class CreateUserServiceTest {
 				Double.valueOf(0));
 	}
 
-	private User aNormalUserRequest() {
-		return new User("John Smith", "jsmith@gmail.com", "an address 123", "+543675675443", UserType.NORMAL,
+	private UserRequest aNormalUserRequest() {
+		return new UserRequest("John Smith", "jsmith@gmail.com", "an address 123", "+543675675443", UserType.NORMAL,
 				Double.valueOf(0));
 	}
 
@@ -99,8 +99,8 @@ public class CreateUserServiceTest {
 		return new UserEntity("John Smith", "jsmith@gmail.com", "an address 123", "+543675675443", userType, money);
 	}
 
-	private static User aUserRequestWithTypeAndMoney(UserType userType, Double money) {
-		return new User("John Smith", "jsmith@gmail.com", "an address 123", "+543675675443", userType, money);
+	private static UserRequest aUserRequestWithTypeAndMoney(UserType userType, Double money) {
+		return new UserRequest("John Smith", "jsmith@gmail.com", "an address 123", "+543675675443", userType, money);
 	}
 
 	private static Stream<Arguments> testCreateUsersParameters() throws Throwable {

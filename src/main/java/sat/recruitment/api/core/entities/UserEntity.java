@@ -2,7 +2,7 @@ package sat.recruitment.api.core.entities;
 
 import org.apache.commons.csv.CSVRecord;
 
-import sat.recruitment.api.core.contracts.User;
+import sat.recruitment.api.core.contracts.UserRequest;
 
 public class UserEntity {
 
@@ -23,7 +23,7 @@ public class UserEntity {
 		this.money = money;
 	}
 
-	public UserEntity(User userRequest) {
+	public UserEntity(UserRequest userRequest) {
 		this.name = userRequest.getName();
 		this.email = userRequest.getEmail();
 		this.address = userRequest.getAddress();
